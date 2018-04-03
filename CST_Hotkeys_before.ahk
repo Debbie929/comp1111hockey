@@ -7,19 +7,18 @@
 ;------------------------------------------
 
 
-;[delete this line and retype here.]
+;[type here]
+
 
 
 ;------------------------------------------
-; #2: Remap your keyboard
+; #2: Remap your keyboard 
 ; #2-1: remap your keyboard to dvorak keyboard
 ; #2-2: permanently set CapsLock, numLock, scrollLock
 ;------------------------------------------
 
 
-
-;[delete this line and retype here.]
-
+;[type here]
 
 
 
@@ -29,22 +28,21 @@
 
 
 
-;[delete this line and retype here.]
+;[type here]
 
 
 
 
 ;------------------------------------------
-; #4: open a folder, program.
+; #4: open a folder, program. 
 ; #4-1: hotkey for comp1111 folder.
-; #4-2: hotkey for eclipse.
-; #4-3: hotkey for command-line.
-; #4-4: hotkey for D2L.
+; #4-2: hotkey for command-line.
+; #4-3: hotkey for D2L.
 ;------------------------------------------
 
 
 
-;[delete this line and retype here.]
+;[type here]
 
 
 
@@ -57,55 +55,74 @@
 
 
 
-;[delete this line and retype here.]
+;[type here]
 
 
 
 
 ;------------------------------------------
-; #6: mouse unstucker
-; #6-1: open new notepade and name it run chrome.ahk
-; #6-1: hotkey that allow you to exit a frezed game by lunch chrome.
+; #6: rapid clicker
+; #6-1: try it on https://cookie.riimu.net/speed/
 ;------------------------------------------
 
 
 
-;[delete this line and retype here.]
 
+;[refer the rapidClicker.ahk  in example folder]
 
-
-
-;------------------------------------------
-; #7: use autohotkey to control autohotkey
-; #7-1: hotkey to suspend autohotkey
-; #7-2: hotkey to exit autohotkey
-;------------------------------------------
-
-
-
-;[delete this line and retype here.]
 
 
 
 
 ;------------------------------------------
-; #8: rapid clicker
-; #8-1: new notepad for rapid clicker
-; #8-2: write suspend and clicker
-; #8-3: put short-cut key here.
-; #8-4: try it on https://cookie.riimu.net/speed/
+; #7 Drag windows by clicking anywhere (not just on the title bar)
 ;------------------------------------------
 
++LButton::
+CoordMode, Mouse  ; Switch to screen/absolute coordinates.
+MouseGetPos, EWD_MouseStartX, EWD_MouseStartY, EWD_MouseWin
+WinGetPos, EWD_OriginalPosX, EWD_OriginalPosY,,, ahk_id %EWD_MouseWin%
+WinGet, EWD_WinState, MinMax, ahk_id %EWD_MouseWin% 
+if EWD_WinState = 0  ; Only if the window isn't maximized
+    SetTimer, EWD_WatchMouse, 10 ; Track the mouse as the user drags it.
+return
 
+EWD_WatchMouse:
+GetKeyState, EWD_LButtonState, LButton, P
+if EWD_LButtonState = U  ; Button has been released, so drag is complete.
+{
+    SetTimer, EWD_WatchMouse, Off
+    return
+}
+GetKeyState, EWD_EscapeState, Escape, P
+if EWD_EscapeState = D  ; Escape has been pressed, so drag is cancelled.
+{
+    SetTimer, EWD_WatchMouse, Off
+    WinMove, ahk_id %EWD_MouseWin%,, %EWD_OriginalPosX%, %EWD_OriginalPosY%
+    return
+}
+; Otherwise, reposition the window to match the change in mouse coordinates
+; caused by the user having dragged the mouse:
+CoordMode, Mouse
+MouseGetPos, EWD_MouseX, EWD_MouseY
+WinGetPos, EWD_WinX, EWD_WinY,,, ahk_id %EWD_MouseWin%
+SetWinDelay, -1   ; Makes the below move faster/smoother.
+WinMove, ahk_id %EWD_MouseWin%,, EWD_WinX + EWD_MouseX - EWD_MouseStartX, EWD_WinY + EWD_MouseY - EWD_MouseStartY
+EWD_MouseStartX := EWD_MouseX  ; Update for the next timer-call to this subroutine.
+EWD_MouseStartY := EWD_MouseY
+return
 
-;[delete this line and retype here.]
-
-
+; Note: You can optionally release CapsLock or the middle mouse button after
+; pressing down the mouse button rather than holding it down the whole time.
+; This script requires v1.0.25+.
 
 
 ;------------------------------------------
-; #9: don't forget the final RETURN
+; #8: don't forget the final RETURN
 ;------------------------------------------
 
 return
+
+
+
 
